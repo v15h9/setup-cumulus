@@ -1,0 +1,30 @@
+name: Set Up Cumulus
+description: 'Install CumulusCI and sfdx'
+inputs:
+  cumulusci-version:
+    description: 'version of CumulusCI to install'
+    required: true
+    default: '3.60.0'
+  sfdx-version:
+    description: 'version of SFDX to install'
+    required: true
+    default: '7.154.0'
+runs:
+    using: "composite"
+    steps:
+      - name: Set Up Node 
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Install sfdx
+        run: |
+          npm install -g 'sfdx-cli@${{ inputs.sfdx-version }}'
+        shell: bash
+      - name: Set Up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.10"
+      - name: Install CumulusCI
+        run: |
+          pip install 'cumulusci==${{ inputs.cumulusci-version }}'
+        shell: bash
