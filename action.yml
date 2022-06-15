@@ -14,8 +14,8 @@ runs:
     steps:
       - name: Store Versions
         run: |
-          cat "${{ inputs.sfdx-version }}" > actions-sfdx-version.txt
-          cat "${{ inputs.cumulusci-version }}" > actions-cci-version.txt
+          echo "${{ inputs.sfdx-version }}" > actions-sfdx-version.txt
+          echo "${{ inputs.cumulusci-version }}" > actions-cci-version.txt
         shell: bash
       - name: Set Up Node 
         uses: actions/setup-node@v3
