@@ -3,19 +3,25 @@ description: 'Install CumulusCI and sfdx'
 inputs:
   cumulusci-version:
     description: 'version of CumulusCI to install'
-    required: true
-    default: 'latest'
+    required: false
   sfdx-version:
     description: 'version of SFDX to install'
-    required: true
-    default: 'latest'
+    required: false
 runs:
     using: "composite"
     steps:
+      - name: Set Installable Versions
+        id: versions
+        # Note: we do not pin an action tag here. This is deliberate,
+        # to allow us flexibility in pinning specific package versions.
+        uses: cumulusci-actions/default-package-versions@main
+        with:
+          cumulusci-version: '${{ inputs.cumulusci-version }}'
+          sfdx-version: '${{ inputs.sfdx-version }}'
       - name: Store Versions
         run: |
-          sfdx version > actions-sfdx-version.txt
-          cci version > actions-cci-version.txt
+          echo '${{ steps.versions.outputs.sfdx-version }}' > actions-sfdx-version.txt
+          echo '${{ steps.versions.outputs.cumulusci-version }}' > actions-cci-version.txt
         shell: bash
       - name: Set Up Node 
         uses: actions/setup-node@v3
@@ -25,7 +31,7 @@ runs:
           cache-dependency-path: actions-sfdx-version.txt
       - name: Install sfdx
         run: |
-          npm install -g 'sfdx-cli@${{ inputs.sfdx-version }}'
+          npm install -g 'sfdx-cli@${{ steps.versions.outputs.sfdx-version }}'
         shell: bash
       - name: Set Up Python
         uses: actions/setup-python@v3
@@ -35,11 +41,5 @@ runs:
           cache-dependency-path: actions-cci-version.txt
       - name: Install CumulusCI
         run: |
-          if [ '${{ inputs.cumulusci-version }}' == 'latest' ]; then
-            VERSION=''
-          else
-            VERSION='==${{ inputs.cumulusci-version }}'
-          fi
-
-          pip install "cumulusci$VERSION"
+          pip install "cumulusci${{ steps.versions.outputs.cumulusci-version }}"
         shell: bash
