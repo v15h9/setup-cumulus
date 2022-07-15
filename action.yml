@@ -12,6 +12,11 @@ inputs:
 runs:
     using: "composite"
     steps:
+      - name: Store Versions
+        run: |
+          sfdx version > actions-sfdx-version.txt
+          cci version > actions-cci-version.txt
+        shell: bash
       - name: Set Up Node 
         uses: actions/setup-node@v3
         with:
@@ -37,9 +42,4 @@ runs:
           fi
 
           pip install "cumulusci$VERSION"
-        shell: bash
-      - name: Store Versions
-        run: |
-          sfdx version > actions-sfdx-version.txt
-          cci version > actions-cci-version.txt
         shell: bash
