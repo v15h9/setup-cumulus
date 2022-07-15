@@ -4,19 +4,14 @@ inputs:
   cumulusci-version:
     description: 'version of CumulusCI to install'
     required: true
-    default: '3.61.1'
+    default: 'latest'
   sfdx-version:
     description: 'version of SFDX to install'
     required: true
-    default: '7.154.0'
+    default: 'latest'
 runs:
     using: "composite"
     steps:
-      - name: Store Versions
-        run: |
-          echo "${{ inputs.sfdx-version }}" > actions-sfdx-version.txt
-          echo "${{ inputs.cumulusci-version }}" > actions-cci-version.txt
-        shell: bash
       - name: Set Up Node 
         uses: actions/setup-node@v3
         with:
@@ -35,5 +30,16 @@ runs:
           cache-dependency-path: actions-cci-version.txt
       - name: Install CumulusCI
         run: |
-          pip install 'cumulusci==${{ inputs.cumulusci-version }}'
+          if [ '${{ inputs.cumulusci-version }}' == 'latest' ]; then
+            VERSION=''
+          else
+            VERSION='==${{ inputs.cumulusci-version }}'
+          fi
+
+          pip install "cumulusci$VERSION"
+        shell: bash
+      - name: Store Versions
+        run: |
+          sfdx version > actions-sfdx-version.txt
+          cci version > actions-cci-version.txt
         shell: bash
