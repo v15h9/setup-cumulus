@@ -4,7 +4,7 @@ inputs:
   cumulusci-version:
     description: 'version of CumulusCI to install'
     required: true
-    default: '3.60.0'
+    default: '3.61.1'
   sfdx-version:
     description: 'version of SFDX to install'
     required: true
