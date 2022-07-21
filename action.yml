@@ -41,5 +41,5 @@ runs:
           cache-dependency-path: actions-cci-version.txt
       - name: Install CumulusCI
         run: |
-          pip install "cumulusci==${{ steps.versions.outputs.cumulusci-version }}"
+          pip install 'cumulusci==${{ steps.versions.outputs.cumulusci-version }}'
         shell: bash
