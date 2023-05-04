@@ -14,7 +14,7 @@ runs:
         id: versions
         # Note: we do not pin an action tag here. This is deliberate,
         # to allow us flexibility in pinning specific package versions.
-        uses: v15h9/default-package-versions@main
+        uses: v15h9/default-package-versions@patch-1
         with:
           cumulusci-version: '${{ inputs.cumulusci-version }}'
           sfdx-version: '${{ inputs.sfdx-version }}'
